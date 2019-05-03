@@ -135,7 +135,16 @@ void List::displayList()
 void List::mergeLists(int l, int m, int r)
 {
     Link* temp = first;
+    Link* temp2;
 
+    for (int i = 0; i < (listSize/2)-1; i++)
+    {
+        if (i == listSize/2)
+        {
+            temp2 = temp;
+        }
+        temp = temp->next;
+    }
 
 
     int i, j, k;
@@ -158,7 +167,6 @@ void List::mergeLists(int l, int m, int r)
     for (j = 0; j < n2; j++)
     {
         list2->AddLink(temp->contents);
-
     }
 
 
