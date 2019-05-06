@@ -15,13 +15,15 @@ class List
         Link* getLast();
         int getSize();
         void initializeList(int);
-        void AddLink(int);
-        void AddLinkAfter(Link*);
+        void AddLink(int, Link*);
+        void AddLinkAfter(Link*, Link*);
         Link* RemoveLink(Link*);
         void FindLink(int);
         void displayList();
         void mergeLists(int, int, int);
-        void mergeSort();
+        void mergeSort(int, int);
+        Link* getLinkAt(int);
+        void Delete(Link*);
 
 
     protected:

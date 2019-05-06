@@ -5,16 +5,23 @@
 class Link
 {
     public:
-        Link* next;
-        Link* prev;
-        int contents;
+
         Link();
         virtual ~Link();
         void displayLink(Link*);
+        void setNext(Link*);
+        void setPrev(Link*);
+        void setContents(int);
+        Link* getNext();
+        Link* getPrev();
+        int getContents();
 
     protected:
 
     private:
+        Link* next;
+        Link* prev;
+        int contents;
 
 };
 

@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include "List.h"
 #include "Link.h"
+#include <windows.h>
 
 using namespace std;
 
@@ -17,6 +18,16 @@ int main()
 
     myList->initializeList(listSize);
 
+    myList->displayList();
+    system("PAUSE");
+    system("CLS");
+
+
+    system("PAUSE");
+    myList->mergeSort(0, listSize);
+
+    system("PAUSE");
+    system("CLS");
     myList->displayList();
 
 

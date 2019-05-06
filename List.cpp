@@ -16,74 +16,116 @@ List::~List()
     //dtor
 }
 
-void List::initializeList(int listSize)
+void List::setFirst(Link* _first)
+{
+    first = _first;
+}
+
+void List::setLast(Link* _last)
+{
+    last = _last;
+}
+
+void List::setSize(int _size)
+{
+    listSize = _size;
+}
+
+Link* List::getFirst()
+{
+    return first;
+}
+
+Link* List::getLast()
+{
+    return last;
+}
+
+int List::getSize()
+{
+    return listSize;
+}
+
+void List::initializeList(int _listSize)
 {
     first = NULL;
     srand(time(NULL));
 
+    listSize = _listSize;
+
     for (int i = 0; i < listSize+1; i++)
     {
-        AddLink(rand()%10+1);
+        AddLink(rand()%10+1, first);
     }
     return;
 }
 
-void List::AddLink(int _contents)
+void List::AddLink(int _contents, Link* destination)
 {
     Link* newlink = new Link;
-    newlink->contents = _contents;
+    newlink->setContents(_contents);
     //cout << newlink->contents;
-    AddLinkAfter(newlink);
+    AddLinkAfter(newlink, destination);
 }
 
-void List::AddLinkAfter(Link* _link)
+void List::AddLinkAfter(Link* _link, Link* destination)
 {
 
-    Link* temp = first;
-
-    if (temp == NULL)
+    if (destination == NULL)
     {
         first = _link;
-        first->next = NULL;
+        last = first;
+        first->setNext(NULL);
         return;
     }
 
-    else if (temp->next == NULL)
-    {
-        temp->next = _link;
-        _link->next = NULL;
-        return;
-    }
     else
     {
-        while (temp != NULL)
+        if (destination->getNext() == NULL)
         {
-            if (temp->next == NULL)
+
+        while (true)
+        {
+            if (destination->getNext() == NULL)
             {
-                temp->next = _link;
-                _link->next = NULL;
+                destination->setNext(_link);
+                _link->setNext(NULL);
+                //last = _link;
                 return;
             }
             else
             {
-                temp = temp->next;
+                destination = destination->getNext();
             }
 
         }
+        }
+
+
+        else
+        {
+            _link->setNext(destination->getNext());
+            destination->setNext(_link);
+            _link->setPrev(destination);
+
+            //destination = destination->getNext();
+        }
+
         return;
     }
-
 }
 
+// Unnecessary Functions
+/*
 Link* List::RemoveLink(Link* _link)
 {
     if (_link == first)
     {
-        _link->next->prev = NULL;
+        _link->getNext()->setPrev(NULL);
     }
     else if (_link == last)
     {
-        _link->prev->next = NULL;
+        _link->getPrev()->setNext(NULL);
     }
     else
     {
@@ -113,79 +155,102 @@ void List::FindLink(int num)
     }
 
 }
+*/
 
 void List::displayList()
 {
     Link* temp = first;
     int i = 0;
 
-    while (temp->next != NULL)
+    while (temp->getNext() != NULL)
     {
         cout << "Element " << i+1 << "" << ":    ";
         temp->displayLink(temp);
-        temp = temp->next;
+        temp = temp->getNext();
         i++;
     }
 
     return;
 }
 
-// Merge and Merge Sort Functions
-
-void List::mergeLists(int l, int m, int r)
+Link* List::getLinkAt(int pos)
 {
     Link* temp = first;
-    Link* temp2;
 
-    for (int i = 0; i < (listSize/2)-1; i++)
+    for (int i = 0; i < pos; i++)
     {
-        if (i == listSize/2)
-        {
-            temp2 = temp;
-        }
-        temp = temp->next;
+        temp = temp->getNext();
     }
+    return temp;
+}
 
+void List::Delete(Link* _link)
+{
+    _link = NULL;
+    return;
+}
 
+// Merge and Merge Sort Functions
+
+void List::mergeLists(int low, int mid, int high)
+{
     int i, j, k;
-    int n1 = m - l + 1;
-    int n2 =  r - m;
+    int n1 = mid - low + 1;
+    int n2 =  high - mid;
+
+    i = 0; // Initial index of first subarray
+    j = 0; // Initial index of second subarray
+    k = low; // Initial index of merged subarray
 
     /* create temp lists */
 
-    List* list1 = new List;
-    List* list2 = new List;
+    List left, right;
 
-    /* Copy data to temp lists */
+    // Split Lists
 
     for (i = 0; i < n1; i++)
     {
-        list1->AddLink(temp->contents);
-        temp = temp->next;
+        cout << "Split 1" << endl;
+        left.AddLink(getLinkAt(low + i)->getContents(), getFirst());
+        cout << endl;
+        cout << getLinkAt(low + i)->getContents();
+        cout << endl;
+
     }
+    //cout << "Left Side: " << endl;
+    //left.displayList();
 
     for (j = 0; j < n2; j++)
     {
-        list2->AddLink(temp->contents);
+        cout << "Split 2" << endl;
+        right.AddLink(getLinkAt(mid + 1 + j)->getContents(), getFirst());
+        cout << endl;
+        cout << getLinkAt(mid + 1 + j)->getContents();
+        cout << endl;
     }
 
+    //cout << "Right Side: " << endl;
+    //right.displayList();
 
-    /* Merge the temp arrays back into arr[l..r]*/
-    i = 0; // Initial index of first subarray
-    j = 0; // Initial index of second subarray
-    k = l; // Initial index of merged subarray
+
+    // Merge lists
+
+
 
 
     while (i < n1 && j < n2)
     {
-        if (L[i] <= R[j])
+        if (left.getLinkAt(i)->getContents()  <= right.getLinkAt(j)->getContents())
         {
-            arr[k] = L[i];
+            //arr[k] = L[i];
+            AddLink(left.getLinkAt(i)->getContents(), getLinkAt(k));
+            Delete(getLinkAt(k));
             i++;
         }
         else
         {
-            arr[k] = R[j];
+            AddLink(right.getLinkAt(j)->getContents(), getLinkAt(k));
+            Delete(getLinkAt(k));
             j++;
         }
         k++;
@@ -195,16 +260,19 @@ void List::mergeLists(int l, int m, int r)
        are any */
     while (i < n1)
     {
-        arr[k] = L[i];
+        AddLink(left.getLinkAt(i)->getContents(), getLinkAt(k));
+        Delete(getLinkAt(k));
         i++;
         k++;
     }
 
     /* Copy the remaining elements of R[], if there
        are any */
+
     while (j < n2)
     {
-        arr[k] = R[j];
+        AddLink(right.getLinkAt(j)->getContents(), getLinkAt(k));
+        Delete(getLinkAt(k));
         j++;
         k++;
     }
@@ -221,18 +289,17 @@ void List::mergeLists(int l, int m, int r)
 /* l is for left index and r is right index of the
    sub-array of arr to be sorted */
 
-void List::mergeSort(int l, int r)
+void List::mergeSort(int low, int high)
 {
-    if (l < r)
+    if (low < high)
     {
-        // Same as (l+r)/2, but avoids overflow for
-        // large l and h
-        int m = (l+r)/2;
+        int mid = (low+high)/2;
 
         // Sort first and second halves
-        mergeSort(l, m);
-        mergeSort(m+1, r);
+        mergeSort(low, mid);
+        mergeSort(mid+1, high);
 
-        mergeLists(l, m, r);
+        mergeLists(low, mid, high);
     }
+    return;
 }
