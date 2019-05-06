@@ -212,7 +212,8 @@ void List::mergeLists(int low, int mid, int high)
     {
         cout << "Split 1" << endl;
         left.AddLink(getLinkAt(low + i)->getContents(), getFirst());
-        cout << endl;
+        
+        cout << endl;                            // DEBUG
         cout << getLinkAt(low + i)->getContents();
         cout << endl;
 
@@ -224,7 +225,8 @@ void List::mergeLists(int low, int mid, int high)
     {
         cout << "Split 2" << endl;
         right.AddLink(getLinkAt(mid + 1 + j)->getContents(), getFirst());
-        cout << endl;
+        
+        cout << endl;                                             // DEBUG
         cout << getLinkAt(mid + 1 + j)->getContents();
         cout << endl;
     }
