@@ -29,7 +29,7 @@ class List
     protected:
 
     private:
-        Link* first;
+        Link* first = nullptr;
         Link* last;
         int listSize;
 };

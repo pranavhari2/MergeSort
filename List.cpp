@@ -48,14 +48,13 @@ int List::getSize()
 
 void List::initializeList(int _listSize)
 {
-    first = NULL;
     srand(time(NULL));
 
     listSize = _listSize;
 
     for (int i = 0; i < listSize+1; i++)
     {
-        AddLink(rand()%10+1, first);
+        AddLink(rand()%10+1, last);
     }
     return;
 }
@@ -70,52 +69,31 @@ void List::AddLink(int _contents, Link* destination)
 
 void List::AddLinkAfter(Link* _link, Link* destination)
 {
-
     if (destination == NULL)
     {
         first = _link;
-        last = first;
+        last = first;               // To set both values the same , last is top
         first->setNext(NULL);
+    }
+
+    else if (destination == first || destination == last )
+    {
+        destination->setNext(_link);
+        last = _link;
+        destination->getNext()->setNext(NULL);
         return;
     }
 
     else
     {
-        if (destination->getNext() == NULL)
-        {
-
-        while (true)
-        {
-            if (destination->getNext() == NULL)
-            {
-                destination->setNext(_link);
-                _link->setNext(NULL);
-                //last = _link;
-                return;
-            }
-            else
-            {
-                destination = destination->getNext();
-            }
-
-        }
-        }
-
-
-        else
-        {
-            _link->setNext(destination->getNext());
-            destination->setNext(_link);
-            _link->setPrev(destination);
-
-            //destination = destination->getNext();
-        }
-
-        return;
+        _link->setNext(destination->getNext());
+        destination->setNext(_link);
+        _link->setPrev(destination);
     }
+
+    return;
 }
 
-// Unnecessary Functions
 /*
 Link* List::RemoveLink(Link* _link)
 {
@@ -198,41 +176,27 @@ void List::mergeLists(int low, int mid, int high)
     int n1 = mid - low + 1;
     int n2 =  high - mid;
 
-    i = 0; // Initial index of first subarray
-    j = 0; // Initial index of second subarray
-    k = low; // Initial index of merged subarray
+    i = 0; // Initial index of first list
+    j = 0; // Initial index of second list
+    k = low; // Initial index of merged list
 
     /* create temp lists */
 
     List left, right;
 
-    // Split Lists
+    // Put data into temp lists
 
     for (i = 0; i < n1; i++)
     {
-        cout << "Split 1" << endl;
-        left.AddLink(getLinkAt(low + i)->getContents(), getFirst());
-        
-        cout << endl;                            // DEBUG
-        cout << getLinkAt(low + i)->getContents();
-        cout << endl;
-
+        cout << "LEFT:" << endl;
+        left.AddLink(getLinkAt(low + i)->getContents(), left.getLast());
     }
-    //cout << "Left Side: " << endl;
-    //left.displayList();
 
     for (j = 0; j < n2; j++)
     {
-        cout << "Split 2" << endl;
-        right.AddLink(getLinkAt(mid + 1 + j)->getContents(), getFirst());
-        
-        cout << endl;                                             // DEBUG
-        cout << getLinkAt(mid + 1 + j)->getContents();
-        cout << endl;
+        cout << "RIGHT" << endl;
+        right.AddLink(getLinkAt(mid + 1 + j)->getContents(), right.getLast());
     }
-
-    //cout << "Right Side: " << endl;
-    //right.displayList();
 
 
     // Merge lists

@@ -16,15 +16,18 @@ int main()
     cout << "Enter the size of the list you want to create: " << endl;
     cin >> listSize;
 
-    myList->initializeList(listSize);
-
-    myList->displayList();
-    system("PAUSE");
     system("CLS");
 
+    myList->initializeList(listSize);
+
+    cout << "Your List:" << endl << endl;
+    myList->displayList();
+    system("PAUSE");
+
 
     system("PAUSE");
-    myList->mergeSort(0, listSize);
+    cout << endl;
+    myList->mergeSort(1, listSize);
 
     system("PAUSE");
     system("CLS");
