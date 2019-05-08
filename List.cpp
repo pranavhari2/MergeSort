@@ -63,54 +63,61 @@ void List::AddLink(int _contents, Link* destination)
 {
     Link* newlink = new Link;
     newlink->setContents(_contents);
-    //cout << newlink->contents;
     AddLinkAfter(newlink, destination);
 }
 
 void List::AddLinkAfter(Link* _link, Link* destination)
 {
-    if (destination == NULL)
+
+    if (first == NULL)
     {
         first = _link;
-        last = first;               // To set both values the same , last is top
-        first->setNext(NULL);
+        last = _link;               // Set both values the same , last is top
     }
 
-    else if (destination == first || destination == last )
+    else if (destination == last)
     {
         destination->setNext(_link);
+        _link->setPrev(destination);
+        _link->setNext(NULL);
         last = _link;
-        destination->getNext()->setNext(NULL);
-        return;
     }
 
     else
     {
         _link->setNext(destination->getNext());
-        destination->setNext(_link);
         _link->setPrev(destination);
+        destination->getNext()->setPrev(_link);
+        destination->setNext(_link);
+
     }
 
     return;
 }
 
-/*
+
 Link* List::RemoveLink(Link* _link)
 {
-    if (_link == first)
-    {
-        _link->getNext()->setPrev(NULL);
-    }
-    else if (_link == last)
-    {
-        _link->getPrev()->setNext(NULL);
-    }
-    else
-    {
-        _link->prev->next = _link->next;
-        _link->next->prev = _link->prev;
-    }
-    return _link;
+     if (_link != NULL)
+     {
+         if (_link == first)
+        {
+            _link->getNext()->setPrev(NULL);
+        }
+        else if (_link == last)
+        {
+            _link->getPrev()->setNext(NULL);
+        }
+        else
+        {
+            _link->getPrev()->setNext(_link->getNext());
+            _link->getNext()->setPrev(_link->getPrev());
+        }
+        return _link;
+     }
+
+     return NULL;
+
 }
 
 void List::FindLink(int num)
@@ -119,7 +126,7 @@ void List::FindLink(int num)
 
     while (temp != NULL)
     {
-        if (temp->contents == num)
+        if (temp->getContents() == num)
         {
             cout << num << " has been found. " << endl;
             return;
@@ -129,11 +136,11 @@ void List::FindLink(int num)
             cout << num << " has not been found";
             return;
         }
-        temp = temp->next;
+        temp = temp->getNext();
     }
 
+    return;
 }
-*/
 
 void List::displayList()
 {
