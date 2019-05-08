@@ -8,7 +8,9 @@ using namespace std;
 
 List::List()
 {
-    //ctor
+    first = NULL;
+    last = NULL;
+    listSize = 0;
 }
 
 List::~List()
@@ -50,6 +52,7 @@ void List::initializeList(int _listSize)
 {
     srand(time(NULL));
 
+
     listSize = _listSize;
 
     for (int i = 0; i < listSize+1; i++)
@@ -63,70 +66,64 @@ void List::AddLink(int _contents, Link* destination)
 {
     Link* newlink = new Link;
     newlink->setContents(_contents);
+    //cout << newlink->contents;
     AddLinkAfter(newlink, destination);
 }
 
 void List::AddLinkAfter(Link* _link, Link* destination)
 {
 
-    if (first == NULL)
+    if (destination == NULL)
     {
         first = _link;
-        last = _link;               // Set both values the same , last is top
+        last = first;               // To set both values the same , last is top
+        first->setNext(NULL);
+        first->setPrev(NULL);
     }
 
     else if (destination == last)
     {
         destination->setNext(_link);
-        _link->setPrev(destination);
-        _link->setNext(NULL);
         last = _link;
+        _link->setNext(NULL);
+        _link->setPrev(destination);
     }
 
     else
     {
-        _link->setNext(destination->getNext());
-        _link->setPrev(destination);
         destination->getNext()->setPrev(_link);
+        _link->setNext(destination->getNext());
         destination->setNext(_link);
-
+        _link->setPrev(destination);
     }
 
     return;
 }
 
-
+/*
 Link* List::RemoveLink(Link* _link)
 {
-     if (_link != NULL)
-     {
-         if (_link == first)
-        {
-            _link->getNext()->setPrev(NULL);
-        }
-        else if (_link == last)
-        {
-            _link->getPrev()->setNext(NULL);
-        }
-        else
-        {
-            _link->getPrev()->setNext(_link->getNext());
-            _link->getNext()->setPrev(_link->getPrev());
-        }
-        return _link;
-     }
-
-     return NULL;
-
+    if (_link == first)
+    {
+        _link->getNext()->setPrev(NULL);
+    }
+    else if (_link == last)
+    {
+        _link->getPrev()->setNext(NULL);
+    }
+    else
+    {
+        _link->prev->next = _link->next;
+        _link->next->prev = _link->prev;
+    }
+    return _link;
 }
-
 void List::FindLink(int num)
 {
     Link* temp = first;
-
     while (temp != NULL)
     {
-        if (temp->getContents() == num)
+        if (temp->contents == num)
         {
             cout << num << " has been found. " << endl;
             return;
@@ -136,11 +133,10 @@ void List::FindLink(int num)
             cout << num << " has not been found";
             return;
         }
-        temp = temp->getNext();
+        temp = temp->next;
     }
-
-    return;
 }
+*/
 
 void List::displayList()
 {
@@ -172,7 +168,6 @@ Link* List::getLinkAt(int pos)
 void List::Delete(Link* _link)
 {
     _link = NULL;
-    return;
 }
 
 // Merge and Merge Sort Functions
@@ -180,8 +175,8 @@ void List::Delete(Link* _link)
 void List::mergeLists(int low, int mid, int high)
 {
     int i, j, k;
-    int n1 = mid - low + 1;
-    int n2 =  high - mid;
+    int leftSize = mid - low + 1;
+    int rightSize =  high - mid;
 
     i = 0; // Initial index of first list
     j = 0; // Initial index of second list
@@ -191,31 +186,45 @@ void List::mergeLists(int low, int mid, int high)
 
     List left, right;
 
+   // cout << "LEFT LIST SIZE:" << left.getLast()->getContents() << endl;
+
     // Put data into temp lists
 
-    for (i = 0; i < n1; i++)
+    for (i = 0; i < leftSize+1; i++)
     {
-        cout << "LEFT:" << endl;
+        //cout << "LEFT:" << endl;
         left.AddLink(getLinkAt(low + i)->getContents(), left.getLast());
+
     }
 
-    for (j = 0; j < n2; j++)
+
+
+    for (j = 0; j < rightSize+1; j++)
     {
-        cout << "RIGHT" << endl;
+       // cout << "RIGHT" << endl;
         right.AddLink(getLinkAt(mid + 1 + j)->getContents(), right.getLast());
+
     }
 
+    cout << "LEFT LIST:" << endl;
+    left.displayList();
+    cout << "RIGHT LIST:" << endl;
+    right.displayList();
 
+    cout << "MERGING..." << endl;
     // Merge lists
 
+    cout << "i: " << i << endl;
+    cout << "LEFT SIZE:" << leftSize << endl;
 
+    cout << "j:" << j << endl;
+    cout << "RIGHT SIZE" << rightSize << endl;
 
-
-    while (i < n1 && j < n2)
+    while (i < leftSize && j < rightSize)
     {
+        cout << "WORKS" << endl;
         if (left.getLinkAt(i)->getContents()  <= right.getLinkAt(j)->getContents())
         {
-            //arr[k] = L[i];
             AddLink(left.getLinkAt(i)->getContents(), getLinkAt(k));
             Delete(getLinkAt(k));
             i++;
@@ -229,9 +238,9 @@ void List::mergeLists(int low, int mid, int high)
         k++;
     }
 
-    /* Copy the remaining elements of L[], if there
-       are any */
-    while (i < n1)
+    // Copy remaining elements of the left list
+
+    while (i < leftSize)
     {
         AddLink(left.getLinkAt(i)->getContents(), getLinkAt(k));
         Delete(getLinkAt(k));
@@ -239,24 +248,17 @@ void List::mergeLists(int low, int mid, int high)
         k++;
     }
 
-    /* Copy the remaining elements of R[], if there
-       are any */
+    // Copy remaining elements of the right list
 
-    while (j < n2)
+    while (j < rightSize)
     {
         AddLink(right.getLinkAt(j)->getContents(), getLinkAt(k));
         Delete(getLinkAt(k));
         j++;
         k++;
     }
+
 }
-
-
-
-
-
-
-
 
 
 /* l is for left index and r is right index of the

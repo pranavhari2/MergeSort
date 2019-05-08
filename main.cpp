@@ -20,17 +20,18 @@ int main()
 
     myList->initializeList(listSize);
 
-    cout << "Your List:" << endl << endl;
+    cout << "Unsorted List:" << endl << endl;
     myList->displayList();
     system("PAUSE");
 
 
     system("PAUSE");
     cout << endl;
-    myList->mergeSort(1, listSize);
+    myList->mergeSort(0, listSize-1);
 
     system("PAUSE");
     system("CLS");
+    cout << "Sorted List:" << endl << endl;
     myList->displayList();
 
 
