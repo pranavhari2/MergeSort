@@ -1,3 +1,5 @@
+// List.h
+
 #ifndef LIST_H
 #define LIST_H
 #include "Link.h"
@@ -23,13 +25,13 @@ class List
         void mergeLists(int, int, int);
         void mergeSort(int, int);
         Link* getLinkAt(int);
-        void Delete(Link*);
+        void DeleteLink(Link*);
 
 
     protected:
 
     private:
-        Link* first;
+        Link* first = nullptr;
         Link* last;
         int listSize;
 };

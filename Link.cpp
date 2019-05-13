@@ -1,3 +1,6 @@
+// Link.cpp
+// Contains all functions that belong to link
+
 #include "Link.h"
 #include <iostream>
 #include <cstdlib>
@@ -15,9 +18,9 @@ Link::~Link()
 }
 
 
-void Link::displayLink(Link* _link)
+void Link::displayLink()
 {
-    cout << _link->contents << endl << endl;
+    cout << getContents();
 }
 
 void Link::setNext(Link* _next)
